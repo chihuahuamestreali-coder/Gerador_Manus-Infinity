@@ -13,6 +13,9 @@ import ManusManager from "./pages/ManusManager";
 import TikTokManager from "./pages/TikTokManager";
 import GmailManager from "./pages/GmailManager";
 import ClaudeManager from "./pages/ClaudeManager";
+import TemuManager from "./pages/TemuManager";
+import DarkManager from "./pages/DarkManager";
+import UrsaManager from "./pages/UrsaManager";
 
 function AppRouter() {
   return (
@@ -26,6 +29,9 @@ function AppRouter() {
       <Route path={"/tiktok"} component={TikTokManager} />
       <Route path={"/gmail"} component={GmailManager} />
       <Route path={"/claude"} component={ClaudeManager} />
+      <Route path={"/temu"} component={TemuManager} />
+      <Route path={"/dark"} component={DarkManager} />
+      <Route path={"/ursa"} component={UrsaManager} />
       <Route path={"/404"} component={NotFound} />
       {/* Rotas raiz por último */}
       <Route path={"/aliexpress"} component={AliExpressManager} />

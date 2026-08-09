@@ -70,6 +70,30 @@ export default function Home() {
       color: 'from-emerald-500/15 via-emerald-500/5 to-transparent border-emerald-500/30 text-emerald-400 hover:border-emerald-500/80',
       badge: 'INBOX PRO'
     },
+    { 
+      title: 'Temu Device Master', 
+      desc: 'Simulação WebView shopping, cupons novo usuário & bypass anti-bot', 
+      path: '/temu', 
+      icon: ShoppingCart, 
+      color: 'from-orange-500/15 via-orange-500/5 to-transparent border-orange-500/30 text-orange-400 hover:border-orange-500/80',
+      badge: 'TEMU APP'
+    },
+    { 
+      title: 'Dark Security Suite', 
+      desc: 'Privacidade avançada, túneis onion proxy & blindagem de headers', 
+      path: '/dark', 
+      icon: ShieldAlert, 
+      color: 'from-emerald-600/15 via-emerald-600/5 to-transparent border-emerald-600/30 text-emerald-300 hover:border-emerald-600/80',
+      badge: 'STEALTH PRO'
+    },
+    { 
+      title: 'Ursa AI Core', 
+      desc: 'Orquestração de agentes autônomos & automação multi-modelo', 
+      path: '/ursa', 
+      icon: Bot, 
+      color: 'from-blue-600/15 via-blue-600/5 to-transparent border-blue-500/30 text-blue-400 hover:border-blue-500/80',
+      badge: 'AGENT CORE'
+    },
   ];
 
   return (
