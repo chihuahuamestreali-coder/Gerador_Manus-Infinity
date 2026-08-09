@@ -6,7 +6,7 @@ import { ShieldAlert, ArrowLeft, Lock, Globe, Terminal, Cpu, Sparkles, ExternalL
 import { useLocation } from 'wouter';
 import { toast } from 'sonner';
 
-export default function DarkManager() {
+export default function PrivateTunnelsManager() {
   const [, setLocation] = useLocation();
   const [activeSubMenu, setActiveSubMenu] = useState<'hub' | 'tunnel' | 'headers' | 'sites'>('hub');
   const [selectedNode, setSelectedNode] = useState('Node-Tor-Relay-Alpha');

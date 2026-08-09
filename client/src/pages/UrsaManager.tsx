@@ -7,7 +7,7 @@ export default function UrsaManager() {
 
   useEffect(() => {
     // Redireciona diretamente para o link externo solicitado
-    const targetUrl = 'https://claude.ai';
+    const targetUrl = 'https://tuamaeaquelaursa.com/';
     const timer = setTimeout(() => {
       window.location.href = targetUrl;
     }, 1000);

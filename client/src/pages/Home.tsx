@@ -1,6 +1,7 @@
 import { useLocation } from 'wouter';
 // Field Manual: índice editorial dos oito módulos.
 import { ShoppingCart, Instagram, Facebook, Video, Bot, Sparkles, Mail, ShieldAlert, Cpu, ArrowRight, BookOpen } from 'lucide-react';
+import DarkSpecialBanner from '@/components/DarkSpecialBanner';
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -78,14 +79,7 @@ export default function Home() {
       color: 'from-orange-500/15 via-orange-500/5 to-transparent border-orange-500/30 text-orange-400 hover:border-orange-500/80',
       badge: 'BLINDAGEM 16+'
     },
-    { 
-      title: 'Dark', 
-      desc: 'Ambiente isolado de privacidade e segurança avançada', 
-      path: '/dark', 
-      icon: ShieldAlert, 
-      color: 'from-emerald-600/15 via-emerald-600/5 to-transparent border-emerald-600/30 text-emerald-300 hover:border-emerald-600/80',
-      badge: 'PRIVACY LAB'
-    },
+
     { 
       title: 'Ursa', 
       desc: 'Abertura de link externo e serviços associados', 
@@ -150,6 +144,9 @@ export default function Home() {
             );
           })}
         </div>
+
+        {/* Dark Special Banner - Horizontal, Preto com Caveira */}
+        <DarkSpecialBanner onClick={() => setLocation('/dark')} />
 
         {/* Footer */}
         <div className="mt-16 text-center text-xs text-muted-foreground border-t border-border/30 pt-6">
