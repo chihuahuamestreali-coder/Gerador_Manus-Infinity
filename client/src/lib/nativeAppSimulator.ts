@@ -11,7 +11,7 @@
  */
 
 export interface AppSimulationOptions {
-  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal';
+  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia';
   locale?: string;
   appVersion?: string;
 }
@@ -179,6 +179,66 @@ export function generateNativeAppSimulationForProfile(
               });
             } catch(e) {}
             console.log('%c🛍️ Simulação de App Nativo TEMU ATIVA (Bypass de Preços & Cupons de Novo Usuário)', 'color: #ff6600; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'skynetchat':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.SkynetApp = { isPresent: true, version: '1.0.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🛡️ Simulação local de App SkynetChat ativa', 'color: #00d9ff; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'deephat':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.DeepHatApp = { isPresent: true, version: '1.0.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🎩 Simulação local de App DeepHat ativa', 'color: #ff006e; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'venice':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.VeniceApp = { isPresent: true, version: '1.0.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🌊 Simulação local de App Venice AI ativa', 'color: #38bdf8; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'simplelogin':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.SimpleLoginApp = { isPresent: true, version: '2.1.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🔒 Simulação local de App SimpleLogin ativa', 'color: #22c55e; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'nastia':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.NastiaApp = { isPresent: true, version: '1.2.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🌸 Simulação local de App Nastia.ai ativa', 'color: #ec4899; font-weight: bold;');
           } catch(err) { console.error('App sim erro:', err); }
         })();
       `;
