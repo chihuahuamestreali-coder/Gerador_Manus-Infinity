@@ -14,10 +14,14 @@ import { generatePersonalData } from '@/lib/personalDataGenerator';
 import { generateCompleteAntiDetectionScript } from '@/lib/cookieAndUserAgentManager';
 import { generateRandomUserAgent } from '@/lib/cookieAndUserAgentManager';
 import { saveAccountRecord, generatePerformanceReport, PerformanceReport } from '@/lib/accountHistoryManager';
+import { generateNativeAppSimulationForProfile } from '@/lib/nativeAppSimulator';
 import { Button } from '@/components/ui/button';
-import { Zap, Copy, Info, ExternalLink, Shield, BarChart3, Trash2, CheckCircle2, AlertCircle, Loader2, MonitorPlay } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Zap, Copy, Info, ExternalLink, Shield, BarChart3, Trash2, CheckCircle2, AlertCircle, Loader2, MonitorPlay, Smartphone } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
+
+const HISTORY_KEY = 'tiktokDeviceHistory';
 
 export default function TikTokManager() {
   const [, setLocation] = useLocation();
@@ -27,11 +31,33 @@ export default function TikTokManager() {
   const [currentPersonalData, setCurrentPersonalData] = useState<any>(null);
   const [currentUserAgent, setCurrentUserAgent] = useState<any>(null);
   const [antiFraudMode, setAntiFraudMode] = useState(true);
+  // Simulação de App Nativo — ATIVADA POR PADRÃO (TikTokApp, como no Instagram/AliExpress)
+  const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
+  const [savedDevices, setSavedDevices] = useState<any[]>([]);
+
+  // Persistência de histórico em localStorage (dados não somem ao fechar a aba)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as any[];
+        setSavedDevices(parsed);
+      }
+    } catch (e) { console.error('Erro ao carregar histórico TikTok:', e); }
+  }, []);
+
   const [performanceReport, setPerformanceReport] = useState<PerformanceReport | null>(null);
   const [injectionStatus, setInjectionStatus] = useState<'idle' | 'opening' | 'injecting' | 'success' | 'error'>('idle');
   const [injectionMessage, setInjectionMessage] = useState('');
   const tiktokWindowRef = useRef<Window | null>(null);
+
+  const persistDeviceHistory = (list: any[]) => {
+    setSavedDevices(list);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) { console.error('Erro ao salvar histórico TikTok:', e); }
+  };
 
   useEffect(() => {
     const report = generatePerformanceReport();
@@ -87,9 +113,10 @@ export default function TikTokManager() {
     setCurrentDevice(newDevice);
     setCurrentPersonalData(personalData);
     setCurrentUserAgent(userAgent);
+    persistDeviceHistory([newDevice, ...savedDevices]);
     setIsGenerating(false);
     
-    toast.success('Novo dispositivo TikTok gerado!', {
+    toast.success('Novo dispositivo TikTok gerado e salvo no histórico!', {
       description: `${newDevice.deviceName} • ${personalData.fullName}`,
     });
   };
@@ -113,10 +140,18 @@ export default function TikTokManager() {
     const appBehavior = generateTikTokAppBehaviorScript();
     const code = bookmarklet.replace('javascript:', '');
     
+    // Script de simulação de app nativo (ativado por padrão)
+    const appSimCode = simulateNativeApp
+      ? generateNativeAppSimulationForProfile({ platform: 'tiktok', userAgent: currentUserAgent ? currentUserAgent.userAgent : '', imei: currentDevice.fingerprint })
+      : '';
+
     let fullCode = code;
     if (antiFraudMode && currentUserAgent) {
       const antiDetectionScript = generateCompleteAntiDetectionScript(currentUserAgent);
-      fullCode = antiDetectionScript + '\n' + appBehavior + '\n' + code;
+      const simBlock = simulateNativeApp ? appSimCode + '\n' : '// Simulação de app nativo DESATIVADA\n';
+      fullCode = antiDetectionScript + '\n' + simBlock + appBehavior + '\n' + code;
+    } else if (simulateNativeApp) {
+      fullCode = appSimCode + '\n' + code;
     }
     
     // Salva registro de conta
@@ -447,6 +482,31 @@ Estado: ${currentPersonalData.state}
                 {antiFraudMode ? 'Desativar' : 'Ativar'} Anti-Fraude
               </button>
             </div>
+          </div>
+        </div>
+
+        {/* Módulos de Proteção — checkbox de Simulação de App Nativo (ativada por padrão) */}
+        <div className="neon-glow-pink rounded-lg p-4 mb-8 bg-secondary/50 border-2 border-pink-500/50">
+          <div className="flex gap-3">
+            <Smartphone size={20} className="text-sky-400 flex-shrink-0 mt-0.5" />
+            <label className="flex-1 cursor-pointer" htmlFor="tiktok-native-app">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="tiktok-native-app"
+                  checked={simulateNativeApp}
+                  onCheckedChange={(checked) => setSimulateNativeApp(checked as boolean)}
+                  className="mt-0.5"
+                />
+                <div>
+                  <h3 className="font-bold text-sky-400">Simulação de App Nativo (TikTok App)</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Injeta <code>TikTokWebView</code>, bridge nativa e User-Agent com a assinatura oficial do app
+                    TikTok ({'{'}app_name: tiktok_trill, channel: googleplay{'}'}). Quando ativa, o TikTok reconhece a
+                    sessão como o app instalado no celular. Desative para usar o modo navegador normal. Ativa por padrão.
+                  </p>
+                </div>
+              </div>
+            </label>
           </div>
         </div>
 

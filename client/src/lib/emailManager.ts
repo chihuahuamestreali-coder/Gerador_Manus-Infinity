@@ -240,6 +240,7 @@ export interface EmailAccount {
   createdAt: Date;
   password?: string;
   notes?: string;
+  status?: string;
 }
 
 // Nomes brasileiros comuns (masculino e feminino)

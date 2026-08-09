@@ -14,6 +14,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { generateManusDeviceProfile, generateManusSignupUrl, generateManusBookmarklet } from '@/lib/manusDeviceGenerator';
 import { generatePersonalData } from '@/lib/personalDataGenerator';
 import { generateRandomUserAgent, generateCompleteAntiDetectionScript } from '@/lib/cookieAndUserAgentManager';
+import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
 import { saveAccountRecord, getAccountHistory, generatePerformanceReport, PerformanceReport } from '@/lib/accountHistoryManager';
 import { generateManusUrlWithReferral } from '@/lib/manusInjectionHelper';
 import { Zap, Copy, ExternalLink, Shield, BarChart3, Trash2, ClipboardCheck, AlertCircle, CheckCircle2, Loader2, Smartphone, Globe, Fingerprint, MonitorPlay, Play } from 'lucide-react';
@@ -134,11 +135,19 @@ export default function ManusManager() {
     const bookmarklet = generateManusBookmarklet(currentDevice);
     const code = bookmarklet.replace('javascript:', '');
     
-    // Se modo anti-fraude está ativo, adiciona scripts de anti-detecção
+    // Se modo anti-fraude está ativo, adiciona scripts de anti-detecção + comportamento humano
     let fullCode = code;
     if (antiFraudMode && currentUserAgent) {
       const antiDetectionScript = generateCompleteAntiDetectionScript(currentUserAgent);
-      fullCode = antiDetectionScript + '\n' + code;
+      const behaviorScript = generateBehaviorInjectionScript({
+        minDelay: 1000,
+        maxDelay: 5000,
+        minTypingSpeed: 80,
+        maxTypingSpeed: 200,
+        enableMouseMovement: true,
+        enableScrolling: true,
+      });
+      fullCode = antiDetectionScript + '\n' + behaviorScript + '\n' + code;
     }
     
     // Salva registro

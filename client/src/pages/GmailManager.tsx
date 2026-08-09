@@ -11,10 +11,15 @@ import { MODULE_GUIDES } from '@/lib/moduleGuides';
 import { useState, useEffect, useRef } from 'react';
 import { GmailDeviceProfile, generateGmailDeviceProfile, formatGmailDataForDisplay } from '@/lib/gmailDeviceGenerator';
 import { generateCompleteAntiDetectionScript, generateRandomUserAgent } from '@/lib/cookieAndUserAgentManager';
+import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
+import { saveAccountRecord } from '@/lib/accountHistoryManager';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Zap, Copy, Info, Play, ExternalLink, CheckCircle2, AlertCircle, Loader2, MonitorPlay } from 'lucide-react';
+import { Zap, Copy, Info, Play, ExternalLink, CheckCircle2, AlertCircle, Loader2, MonitorPlay, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
+
+const HISTORY_KEY = 'gmailDeviceHistory';
 
 export default function GmailManager() {
   const [, setLocation] = useLocation();
@@ -22,7 +27,27 @@ export default function GmailManager() {
   const [selectedDevice, setSelectedDevice] = useState<GmailDeviceProfile | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isInjecting, setIsInjecting] = useState(false);
+  const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
   const injectionWindowRef = useRef<Window | null>(null);
+
+  // Persistência de histórico em localStorage (dados não somem ao fechar a aba)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as GmailDeviceProfile[];
+        setDevices(parsed);
+        if (parsed.length > 0) setSelectedDevice(parsed[0]);
+      }
+    } catch (e) { console.error('Erro ao carregar histórico Gmail:', e); }
+  }, []);
+
+  const persistHistory = (list: GmailDeviceProfile[]) => {
+    setDevices(list);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) { console.error('Erro ao salvar histórico Gmail:', e); }
+  };
 
   // Gerar novo dispositivo
   const handleGenerateDevice = async () => {
@@ -30,9 +55,27 @@ export default function GmailManager() {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       const newDevice = generateGmailDeviceProfile();
-      setDevices([newDevice, ...devices]);
+      persistHistory([newDevice, ...devices]);
       setSelectedDevice(newDevice);
-      toast.success('✓ Dispositivo Gmail gerado com sucesso!');
+      // Persiste no banco de histórico global do projeto
+      saveAccountRecord({
+        id: `rec_${Date.now()}`,
+        email: newDevice.email,
+        createdAt: new Date(),
+        status: 'pending',
+        deviceFingerprint: newDevice.userAgent,
+        userAgent: newDevice.userAgent,
+        personalData: {
+          name: `${newDevice.firstName} ${newDevice.lastName}`,
+          phone: newDevice.recoveryPhone,
+          birthDate: newDevice.birthDate,
+          city: '',
+          state: '',
+        },
+        behaviorConfig: { minDelay: 800, maxDelay: 3000, typingSpeed: 120 },
+        notes: 'Device Gmail gerado',
+      } as any);
+      toast.success('✓ Dispositivo Gmail gerado e salvo no histórico!');
     } catch (error) {
       toast.error('✗ Erro ao gerar dispositivo');
     } finally {
@@ -67,6 +110,9 @@ export default function GmailManager() {
 
       // Gerar script de injeção
       const antiDetectionScript = generateCompleteAntiDetectionScript({ userAgent: selectedDevice.userAgent } as any);
+      const behaviorCode = enableHumanBehavior
+        ? generateBehaviorInjectionScript({ minDelay: 800, maxDelay: 3000, minTypingSpeed: 60, maxTypingSpeed: 180, enableMouseMovement: true, enableScrolling: true })
+        : '';
       const gmailInjectionScript = `
         (function() {
           // Injetar dados do dispositivo
@@ -75,6 +121,8 @@ export default function GmailManager() {
           
           // Injetar anti-detecção
           ${antiDetectionScript}
+          
+          ${enableHumanBehavior ? '// Comportamento humano simulado (delays, mouse, scroll)\n' + behaviorCode : '// Comportamento humano DESATIVADO'}
           
           // Injetar cookies
           Object.entries(${JSON.stringify(selectedDevice.cookies)}).forEach(([key, value]) => {
@@ -109,6 +157,25 @@ export default function GmailManager() {
         </html>
       `);
       injectionWindowRef.current.document.close();
+
+      // Registra sucesso no histórico global
+      saveAccountRecord({
+        id: `rec_${Date.now()}`,
+        email: selectedDevice.email,
+        createdAt: new Date(),
+        status: 'created',
+        deviceFingerprint: selectedDevice.userAgent,
+        userAgent: selectedDevice.userAgent,
+        personalData: {
+          name: `${selectedDevice.firstName} ${selectedDevice.lastName}`,
+          phone: selectedDevice.recoveryPhone,
+          birthDate: selectedDevice.birthDate,
+          city: '',
+          state: '',
+        },
+        behaviorConfig: { minDelay: 800, maxDelay: 3000, typingSpeed: 120 },
+        notes: 'Injeção concluída com sucesso',
+      } as any);
 
       // Aguardar 2 segundos e redirecionar
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -147,6 +214,32 @@ export default function GmailManager() {
             <p>✓ Bypass de CAPTCHA: Ativado</p>
             <p>✓ Anti-detecção: 13+ técnicas</p>
             <p>✓ Injeção real (window.open): Ativada</p>
+            <p>✓ Persistência de Histórico: Histórico salvo em localStorage (não se perde ao fechar a aba)</p>
+            <p>✓ Histórico salvo: {devices.length} dispositivo(s)</p>
+          </div>
+        </div>
+
+        {/* Módulos de Proteção */}
+        <div className="border border-red-500/30 rounded-lg p-6 mb-8 bg-slate-800/50 backdrop-blur">
+          <h2 className="text-xl font-bold mb-4 text-red-400">Módulos de Proteção (ativados por padrão)</h2>
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 border border-cyan-500/40 rounded-md p-4 bg-secondary/20 cursor-pointer hover:bg-secondary/40 transition-colors">
+              <Checkbox
+                checked={enableHumanBehavior}
+                onCheckedChange={(checked) => setEnableHumanBehavior(checked as boolean)}
+                className="mt-0.5"
+              />
+              <div className="flex-1">
+                <div className="flex items-center gap-2 font-semibold text-cyan-300">
+                  <User className="w-4 h-4" />
+                  Simulação de Comportamento Humano
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Injeta delays aleatórios, movimentos de mouse naturais e scroll progressivo na sessão do Gmail,
+                  simulando um usuário humano antes de preencher o formulário de criação de conta.
+                </p>
+              </div>
+            </label>
           </div>
         </div>
 

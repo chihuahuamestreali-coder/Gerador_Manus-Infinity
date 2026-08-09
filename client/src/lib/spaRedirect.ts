@@ -5,7 +5,7 @@
     var match = q.match(/\?p=([^&]*)/);
     if (match && match[1]) {
       var decoded = decodeURIComponent(match[1]);
-      window.history.replaceState(null, null, window.location.pathname + decoded + window.location.hash);
+      window.history.replaceState(null, '', window.location.pathname + decoded + (window.location.hash || ''));
     }
   }
 })();

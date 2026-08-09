@@ -128,6 +128,7 @@ export default function EmailManager() {
       domain: selectedDomain,
       createdAt: new Date(),
       password: generatedPassword,
+      status: 'created',
     };
 
     setEmailAccounts([...emailAccounts, account]);
@@ -267,7 +268,7 @@ export default function EmailManager() {
                 <p className="text-lg font-bold text-cyan-300 font-mono break-all mb-2">
                   {generatedEmail}@{selectedDomain}
                 </p>
-                <p className="text-xs text-muted-foreground font-mono mb-3">SENHA GERADA</p>
+                <p className="text-xs text-muted-foreground font-mono mb-3">SENHA GERADA (copiada ao adicionar conta)</p>
                 <p className="text-lg font-bold text-green-400 font-mono break-all mb-4">
                   {generatedPassword}
                 </p>
@@ -377,6 +378,9 @@ export default function EmailManager() {
                         Senha: {account.password}
                       </p>
                     )}
+                    <p className="text-xs text-emerald-400 font-mono mb-3">
+                      ✓ Status: {account.status === 'created' ? 'Criada' : account.status || 'Ativa'} • Dados persistidos em localStorage
+                    </p>
                     <button
                       onClick={() => handleCopyAccountEmailPassword(account)}
                       className="w-full px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-400 border border-cyan-500/50 rounded transition-colors font-bold text-xs flex items-center justify-center gap-2"

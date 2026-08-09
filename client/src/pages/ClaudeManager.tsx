@@ -11,10 +11,14 @@ import { MODULE_GUIDES } from '@/lib/moduleGuides';
 import { useState, useEffect, useRef } from 'react';
 import { ClaudeDeviceProfile, generateClaudeDeviceProfile, formatClaudeDataForDisplay } from '@/lib/claudeDeviceGenerator';
 import { generateCompleteAntiDetectionScript, generateRandomUserAgent } from '@/lib/cookieAndUserAgentManager';
+import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
 import { Button } from '@/components/ui/button';
-import { Zap, Copy, Info, Play, ExternalLink, CheckCircle2, AlertCircle, Loader2, MonitorPlay } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Zap, Copy, Info, Play, ExternalLink, CheckCircle2, AlertCircle, Loader2, MonitorPlay, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
+
+const HISTORY_KEY = 'claudeDeviceHistory';
 
 export default function ClaudeManager() {
   const [, setLocation] = useLocation();
@@ -22,7 +26,27 @@ export default function ClaudeManager() {
   const [selectedDevice, setSelectedDevice] = useState<ClaudeDeviceProfile | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isInjecting, setIsInjecting] = useState(false);
+  const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
   const injectionWindowRef = useRef<Window | null>(null);
+
+  // Persistência de histórico em localStorage (dados não somem ao fechar a aba)
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as ClaudeDeviceProfile[];
+        setDevices(parsed);
+        if (parsed.length > 0) setSelectedDevice(parsed[0]);
+      }
+    } catch (e) { console.error('Erro ao carregar histórico Claude:', e); }
+  }, []);
+
+  const persistHistory = (list: ClaudeDeviceProfile[]) => {
+    setDevices(list);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) { console.error('Erro ao salvar histórico Claude:', e); }
+  };
 
   // Gerar novo dispositivo
   const handleGenerateDevice = async () => {
@@ -30,9 +54,9 @@ export default function ClaudeManager() {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       const newDevice = generateClaudeDeviceProfile();
-      setDevices([newDevice, ...devices]);
+      persistHistory([newDevice, ...devices]);
       setSelectedDevice(newDevice);
-      toast.success('✓ Dispositivo Claude gerado com sucesso!');
+      toast.success('✓ Dispositivo Claude gerado e salvo no histórico!');
     } catch (error) {
       toast.error('✗ Erro ao gerar dispositivo');
     } finally {
@@ -67,6 +91,9 @@ export default function ClaudeManager() {
 
       // Gerar script de injeção
       const antiDetectionScript = generateCompleteAntiDetectionScript({ userAgent: selectedDevice.userAgent } as any);
+      const behaviorCode = enableHumanBehavior
+        ? generateBehaviorInjectionScript({ minDelay: 800, maxDelay: 3000, minTypingSpeed: 60, maxTypingSpeed: 180, enableMouseMovement: true, enableScrolling: true })
+        : '';
       const claudeInjectionScript = `
         (function() {
           // Injetar dados do dispositivo
@@ -76,6 +103,8 @@ export default function ClaudeManager() {
           
           // Injetar anti-detecção
           ${antiDetectionScript}
+
+          ${enableHumanBehavior ? '// Comportamento humano simulado (delays, mouse, scroll)\n' + behaviorCode : '// Comportamento humano DESATIVADO'}
           
           // Injetar cookies
           Object.entries(${JSON.stringify(selectedDevice.cookies)}).forEach(([key, value]) => {
@@ -149,6 +178,32 @@ export default function ClaudeManager() {
             <p>✓ Bypass de Detecção de Bot: Ativado</p>
             <p>✓ Anti-detecção: 13+ técnicas</p>
             <p>✓ Injeção real (window.open): Ativada</p>
+            <p>✓ Persistência de Histórico: Ativada (dados salvos em localStorage)</p>
+            <p>✓ Histórico salvo: {devices.length} dispositivo(s)</p>
+          </div>
+        </div>
+
+        {/* Módulos de Proteção */}
+        <div className="border border-purple-500/30 rounded-lg p-6 mb-8 bg-slate-800/50 backdrop-blur">
+          <h2 className="text-xl font-bold mb-4 text-purple-400">Módulos de Proteção (ativados por padrão)</h2>
+          <div className="space-y-4">
+            <label className="flex items-start gap-3 border border-cyan-500/40 rounded-md p-4 bg-secondary/20 cursor-pointer hover:bg-secondary/40 transition-colors">
+              <Checkbox
+                checked={enableHumanBehavior}
+                onCheckedChange={(checked) => setEnableHumanBehavior(checked as boolean)}
+                className="mt-0.5"
+              />
+              <div className="flex-1">
+                <div className="flex items-center gap-2 font-semibold text-cyan-300">
+                  <User className="w-4 h-4" />
+                  Simulação de Comportamento Humano
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Injeta delays aleatórios, movimentos de mouse naturais e scroll progressivo na sessão do Claude,
+                  simulando um usuário humano antes de preencher o formulário de criação de conta.
+                </p>
+              </div>
+            </label>
           </div>
         </div>
 
