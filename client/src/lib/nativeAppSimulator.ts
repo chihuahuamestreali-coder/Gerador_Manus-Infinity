@@ -11,7 +11,7 @@
  */
 
 export interface AppSimulationOptions {
-  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'universal';
+  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal';
   locale?: string;
   appVersion?: string;
 }
@@ -119,6 +119,42 @@ export function generateNativeAppSimulationForProfile(
               });
             } catch(e) {}
             console.log('%c🎵 Simulação de App Nativo TikTok ATIVA', 'color: #25f4ee; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'claude':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.ClaudeApp = { isPresent: true, version: '1.0.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c☁️ Simulação local de app Claude ativa', 'color: #d8b4fe; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'gmail':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.GmailApp = { isPresent: true, version: '2026.1', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c✉️ Simulação local de app Gmail ativa', 'color: #fca5a5; font-weight: bold;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'manus':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.ManusApp = { isPresent: true, version: '2.0.0', locale: '${locale}', deviceId: '${options.imei}' };
+            window.__APP_ENV__ = 'native';
+            if (!window.ReactNativeWebView) window.ReactNativeWebView = { postMessage: function(){} };
+            console.log('%c🧩 Simulação local de app Manus ativa', 'color: #93c5fd; font-weight: bold;');
           } catch(err) { console.error('App sim erro:', err); }
         })();
       `;

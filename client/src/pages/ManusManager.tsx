@@ -15,6 +15,7 @@ import { generateManusDeviceProfile, generateManusSignupUrl, generateManusBookma
 import { generatePersonalData } from '@/lib/personalDataGenerator';
 import { generateRandomUserAgent, generateCompleteAntiDetectionScript } from '@/lib/cookieAndUserAgentManager';
 import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
+import { generateNativeAppSimulationForProfile } from '@/lib/nativeAppSimulator';
 import { saveAccountRecord, getAccountHistory, generatePerformanceReport, PerformanceReport } from '@/lib/accountHistoryManager';
 import { generateManusUrlWithReferral } from '@/lib/manusInjectionHelper';
 import { Zap, Copy, ExternalLink, Shield, BarChart3, Trash2, ClipboardCheck, AlertCircle, CheckCircle2, Loader2, Smartphone, Globe, Fingerprint, MonitorPlay, Play } from 'lucide-react';
@@ -29,6 +30,7 @@ export default function ManusManager() {
   const [currentPersonalData, setCurrentPersonalData] = useState<any>(null);
   const [currentUserAgent, setCurrentUserAgent] = useState<any>(null);
   const [antiFraudMode, setAntiFraudMode] = useState(true);
+  const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const [showHistory, setShowHistory] = useState(false);
   const [performanceReport, setPerformanceReport] = useState<PerformanceReport | null>(null);
   const [accountHistory, setAccountHistory] = useState<any[]>([]);
@@ -135,8 +137,13 @@ export default function ManusManager() {
     const bookmarklet = generateManusBookmarklet(currentDevice);
     const code = bookmarklet.replace('javascript:', '');
     
-    // Se modo anti-fraude está ativo, adiciona scripts de anti-detecção + comportamento humano
-    let fullCode = code;
+    // Monta scripts locais de simulação e proteção
+    const nativeAppCode = simulateNativeApp
+      ? generateNativeAppSimulationForProfile({ platform: 'manus', userAgent: currentUserAgent?.userAgent || currentDevice.userAgent, imei: currentDevice.imei || currentDevice.fingerprint })
+      : '';
+
+    // Se modo anti-fraude está ativo, adiciona scripts de proteção + comportamento humano
+    let fullCode = nativeAppCode + '\n' + code;
     if (antiFraudMode && currentUserAgent) {
       const antiDetectionScript = generateCompleteAntiDetectionScript(currentUserAgent);
       const behaviorScript = generateBehaviorInjectionScript({
@@ -614,6 +621,10 @@ CEP: ${currentPersonalData.zipCode}`;
               </div>
             ) : (
               <div className="space-y-4">
+        <label className="flex items-start gap-3 border border-blue-400/30 rounded-md p-4 bg-secondary/20 cursor-pointer">
+          <input type="checkbox" checked={simulateNativeApp} onChange={(event) => setSimulateNativeApp(event.target.checked)} className="mt-1" />
+          <div><div className="font-semibold text-blue-200">Simulação local de app Manus</div><p className="text-xs text-muted-foreground mt-1">Adiciona metadados fictícios de WebView/app ao perfil local. Não acessa nem altera serviços externos.</p></div>
+        </label>
                 {/* Device Card */}
                 <div className="neon-glow rounded-lg p-6 bg-card border border-purple-400/30">
                   <h3 className="text-lg font-bold text-purple-400 mb-4 font-mono">

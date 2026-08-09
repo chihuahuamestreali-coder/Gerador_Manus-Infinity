@@ -12,6 +12,7 @@ import { useState, useEffect, useRef } from 'react';
 import { GmailDeviceProfile, generateGmailDeviceProfile, formatGmailDataForDisplay } from '@/lib/gmailDeviceGenerator';
 import { generateCompleteAntiDetectionScript, generateRandomUserAgent } from '@/lib/cookieAndUserAgentManager';
 import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
+import { generateNativeAppSimulationForProfile } from '@/lib/nativeAppSimulator';
 import { saveAccountRecord } from '@/lib/accountHistoryManager';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ export default function GmailManager() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isInjecting, setIsInjecting] = useState(false);
   const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
+  const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const injectionWindowRef = useRef<Window | null>(null);
 
   // Persistência de histórico em localStorage (dados não somem ao fechar a aba)
@@ -108,7 +110,10 @@ export default function GmailManager() {
         return;
       }
 
-      // Gerar script de injeção
+      // Gerar scripts locais de proteção e simulação
+      const nativeAppCode = simulateNativeApp
+        ? generateNativeAppSimulationForProfile({ platform: 'gmail', userAgent: selectedDevice.userAgent, imei: selectedDevice.deviceFingerprint })
+        : '';
       const antiDetectionScript = generateCompleteAntiDetectionScript({ userAgent: selectedDevice.userAgent } as any);
       const behaviorCode = enableHumanBehavior
         ? generateBehaviorInjectionScript({ minDelay: 800, maxDelay: 3000, minTypingSpeed: 60, maxTypingSpeed: 180, enableMouseMovement: true, enableScrolling: true })
@@ -119,7 +124,10 @@ export default function GmailManager() {
           window.gmailDevice = ${JSON.stringify(selectedDevice)};
           localStorage.setItem('gmailDeviceProfile', JSON.stringify(window.gmailDevice));
           
-          // Injetar anti-detecção
+          // Simulação local de app nativo
+          ${nativeAppCode}
+
+          // Injetar proteção local
           ${antiDetectionScript}
           
           ${enableHumanBehavior ? '// Comportamento humano simulado (delays, mouse, scroll)\n' + behaviorCode : '// Comportamento humano DESATIVADO'}
@@ -222,7 +230,11 @@ export default function GmailManager() {
         {/* Módulos de Proteção */}
         <div className="border border-red-500/30 rounded-lg p-6 mb-8 bg-slate-800/50 backdrop-blur">
           <h2 className="text-xl font-bold mb-4 text-red-400">Módulos de Proteção (ativados por padrão)</h2>
-          <div className="space-y-4">
+                      <div className="space-y-4">
+            <label className="flex items-start gap-3 border border-red-400/30 rounded-md p-4 bg-secondary/20 cursor-pointer">
+              <Checkbox checked={simulateNativeApp} onCheckedChange={(checked) => setSimulateNativeApp(checked as boolean)} className="mt-0.5" />
+              <div className="flex-1"><div className="font-semibold text-red-200">Simulação local de app Gmail</div><p className="text-xs text-muted-foreground mt-1">Adiciona metadados fictícios de WebView/app ao perfil local. Não acessa nem altera serviços externos.</p></div>
+            </label>
             <label className="flex items-start gap-3 border border-cyan-500/40 rounded-md p-4 bg-secondary/20 cursor-pointer hover:bg-secondary/40 transition-colors">
               <Checkbox
                 checked={enableHumanBehavior}

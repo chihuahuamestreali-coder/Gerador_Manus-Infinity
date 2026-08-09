@@ -1,10 +1,11 @@
 import ModuleGuide from '@/components/ModuleGuide';
 import { MODULE_GUIDES } from '@/lib/moduleGuides';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UniversalDeviceProfile, generateUniversalDevice } from '@/lib/universalDeviceGenerator';
 import { generateAdvancedAntiDetection } from '@/lib/advancedAntiDetection';
 import { generateNativeAppSimulationForProfile } from '@/lib/nativeAppSimulator';
 import { generateBehaviorInjectionScript } from '@/lib/humanBehaviorSimulator';
+import { saveAccountRecord, getAccountHistory } from '@/lib/accountHistoryManager';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Play, Loader2, ShieldCheck, Smartphone, Sparkles, ArrowLeft } from 'lucide-react';
@@ -20,12 +21,29 @@ export default function TemuManager() {
   const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
   const [enableCouponBypass, setEnableCouponBypass] = useState(true);
+  const [historyCount, setHistoryCount] = useState(0);
+
+  useEffect(() => {
+    setHistoryCount(getAccountHistory().filter((record) => record.notes?.includes('Temu')).length);
+  }, []);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
     await new Promise(r => setTimeout(r, 800));
     const newDev = generateUniversalDevice('temu');
     setDevice(newDev);
+    saveAccountRecord({
+      id: `temu_${Date.now()}`,
+      email: `temu_${newDev.fingerprint}@local.test`,
+      createdAt: new Date(),
+      status: 'pending',
+      deviceFingerprint: newDev.fingerprint,
+      userAgent: newDev.userAgent,
+      personalData: { name: newDev.deviceName, phone: '', birthDate: '', city: '', state: '' },
+      behaviorConfig: { minDelay: 600, maxDelay: 2500, typingSpeed: 130 },
+      notes: 'Temu — perfil técnico gerado localmente',
+    });
+    setHistoryCount((count) => count + 1);
     setIsGenerating(false);
     toast.success('Novo perfil Temu gerado com simulação de app de compras e cupons!');
   };
@@ -169,7 +187,8 @@ export default function TemuManager() {
               <ShieldCheck className="w-5 h-5 text-emerald-400" />
               1. Gerar Perfil Técnico Temu
             </h2>
-            <p className="text-xs text-muted-foreground mb-4">
+              <p className="text-xs text-muted-foreground mb-2">Histórico local Temu: <span className="text-orange-300 font-bold">{historyCount} perfil(is)</span></p>
+              <p className="text-xs text-muted-foreground mb-4">
               Gera um dispositivo móvel realista com IMEI, MAC, Android ID, resolução e User-Agent otimizados para o ecossistema Temu.
             </p>
             <Button onClick={handleGenerate} disabled={isGenerating} className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-6 py-2.5">
