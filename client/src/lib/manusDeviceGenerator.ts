@@ -17,17 +17,15 @@ export function generateManusDeviceProfile(): DeviceProfile {
  * Cria um URL para abrir a página de criação do Manus com link de convite
  */
 export function generateManusSignupUrl(referralLink?: string): string {
-  if (!referralLink) {
-    return 'https://manus.im/signup';
+  const baseUrl = 'https://manus.im/signup';
+  
+  if (referralLink) {
+    // Se houver link de convite, adiciona como parâmetro
+    const encodedLink = encodeURIComponent(referralLink);
+    return `${baseUrl}?ref=${encodedLink}`;
   }
   
-  // Se for uma URL completa de conversa ou convite, usa diretamente
-  if (referralLink.includes('http://') || referralLink.includes('https://')) {
-    return referralLink;
-  }
-  
-  // Se for apenas o código de convite (ex: abc123xyz), monta a URL oficial
-  return `https://manus.im/signup?ref=${encodeURIComponent(referralLink)}`;
+  return baseUrl;
 }
 
 /**
@@ -53,14 +51,12 @@ export function generateManusBookmarklet(profile: DeviceProfile): string {
         // Detecta se está no Manus
         const isManus = window.location.hostname.includes('manus');
         
-        // Injeta dados no localStorage e flags de bônus / convite
+        // Injeta dados no localStorage
         localStorage.setItem('device_profile', JSON.stringify(profile));
         localStorage.setItem('_device_fingerprint', profile.fingerprint);
         localStorage.setItem('_device_model', profile.model);
         localStorage.setItem('_device_mac', profile.macAddress);
         localStorage.setItem('_device_imei', profile.imei);
-        localStorage.setItem('_manus_bonus_active', 'true');
-        localStorage.setItem('_manus_referral_bypass', 'unlimited_tier');
         
         // Injeta no sessionStorage
         sessionStorage.setItem('device_fingerprint', profile.fingerprint);
