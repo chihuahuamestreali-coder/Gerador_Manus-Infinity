@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import ModuleGuide from '@/components/ModuleGuide';
+import ExternalServiceWorkspace from '@/components/ExternalServiceWorkspace';
+import { EXTERNAL_SERVICES } from '@/lib/externalServiceCatalog';
 import { MODULE_GUIDES } from '@/lib/moduleGuides';
 import { UniversalDeviceProfile, generateUniversalDevice } from '@/lib/universalDeviceGenerator';
 import { generateAdvancedAntiDetection } from '@/lib/advancedAntiDetection';
@@ -13,7 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ShieldAlert, ArrowLeft, Lock, Globe, Terminal, Cpu, Sparkles, ExternalLink, ShieldCheck, Zap, Bot, Eye, Key, MessageSquare, Heart, Copy, Play, Loader2, Skull } from 'lucide-react';
 import { toast } from 'sonner';
 
-type DarkTab = 'hub' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia';
+type DarkTab = 'hub' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'uncensored' | 'atomicmail';
 
 export default function DarkSpecial() {
   const [, setLocation] = useLocation();
@@ -37,6 +39,8 @@ export default function DarkSpecial() {
     venice: { name: 'Venice AI', url: 'https://venice.ai', icon: Sparkles, color: 'text-sky-400', desc: 'IA privada e sem censura com spoofing completo de navegador e WebRTC guard.' },
     simplelogin: { name: 'SimpleLogin', url: 'https://app.simplelogin.io', icon: Key, color: 'text-emerald-400', desc: 'Gerenciador de aliases de email anônimos para cadastros blindados.' },
     nastia: { name: 'Nastia.ai', url: 'https://nastia.ai', icon: Heart, color: 'text-pink-400', desc: 'Plataforma de avatares e companheiros de IA com WebView móvel simulado.' },
+    uncensored: { name: 'Uncensored', url: 'https://uncensored.com/', icon: Globe, color: 'text-cyan-300', desc: 'Atalho oficial com preparação e diagnóstico local, sem alterar autenticação ou controles externos.' },
+    atomicmail: { name: 'Atomic Mail', url: 'https://atomicmail.io/', icon: ShieldCheck, color: 'text-emerald-300', desc: 'Atalho oficial para email privado com ficha sintética local e limites de segurança explícitos.' },
   };
 
   const handleGenerate = async (serviceKey: string) => {
@@ -193,10 +197,10 @@ export default function DarkSpecial() {
           <div>
             <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider mb-1">
               <Skull className="w-4 h-4" />
-              <span>Dark Master Hub • 5 Serviços Exclusivos</span>
+              <span>Dark Master Hub • 7 Serviços Exclusivos</span>
             </div>
             <h1 className="text-3xl font-extrabold text-white">DARK SUITE</h1>
-            <p className="text-xs text-[#777]">Painel centralizado com SkynetChat, DeepHat, Venice AI, SimpleLogin e Nastia.ai</p>
+            <p className="text-xs text-[#777]">Painel centralizado com SkynetChat, DeepHat, Venice AI, SimpleLogin, Nastia.ai, Uncensored e Atomic Mail</p>
           </div>
           <Button onClick={() => setLocation('/')} variant="outline" className="border-[#333] bg-[#0a0a0a] text-white hover:bg-[#222] text-xs">
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -245,10 +249,10 @@ export default function DarkSpecial() {
             <div className="bg-[#0a0a0a] border border-[#222] rounded-2xl p-6">
               <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <ShieldAlert className="w-5 h-5 text-cyan-400" />
-                Selecione um dos 5 Serviços Dark para Iniciar
+                Selecione um dos 7 Serviços Dark para Iniciar
               </h2>
               <p className="text-xs text-[#888] mb-6 leading-relaxed">
-                Cada serviço abaixo possui um gerador de dispositivo exclusivo, simulação de aplicativo nativo e injeção automática de sessões blindadas e anti-detecção.
+                Cada serviço abaixo possui um fluxo independente. Os serviços legados mantêm suas ferramentas locais existentes; Uncensored e Atomic Mail usam preparação diagnóstica e abertura oficial, sem contornar controles do destino.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -283,6 +287,13 @@ export default function DarkSpecial() {
               </div>
             </div>
           </div>
+        ) : activeTab === 'uncensored' || activeTab === 'atomicmail' ? (
+          <ExternalServiceWorkspace
+            service={EXTERNAL_SERVICES[activeTab]}
+            guide={MODULE_GUIDES[activeTab]}
+            modeLabel="Dark Master / preparação local"
+            onBack={() => { setActiveTab('hub'); setDevice(null); setPersonalData(null); }}
+          />
         ) : (
           <div className="space-y-6">
             <ModuleGuide guide={MODULE_GUIDES[activeTab]} accentClass="text-cyan-400" />

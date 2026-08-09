@@ -16,7 +16,8 @@ import ClaudeManager from "./pages/ClaudeManager";
 import TemuManager from "./pages/TemuManager";
 import PrivateTunnelsManager from "./pages/PrivateTunnelsManager";
 import DarkSpecial from "./pages/DarkSpecial";
-import UrsaManager from "./pages/UrsaManager";
+import UrsaManager from "@/pages/UrsaManager";
+import VanGoghHub from "@/pages/VanGoghHub";
 
 function AppRouter() {
   return (
@@ -34,6 +35,7 @@ function AppRouter() {
       <Route path={"/private-tunnels"} component={PrivateTunnelsManager} />
       <Route path={"/dark"} component={DarkSpecial} />
       <Route path={"/ursa"} component={UrsaManager} />
+      <Route path={"/van-gogh"} component={VanGoghHub} />
       <Route path={"/404"} component={NotFound} />
       {/* Rotas raiz por último */}
       <Route path={"/aliexpress"} component={AliExpressManager} />
