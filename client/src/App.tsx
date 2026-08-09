@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Router, Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -14,9 +14,10 @@ import TikTokManager from "./pages/TikTokManager";
 import GmailManager from "./pages/GmailManager";
 import ClaudeManager from "./pages/ClaudeManager";
 
-function Router() {
+function AppRouter() {
   return (
-    <Switch>
+    <Router base="/Gerador_Manus-Infinity">
+      <Switch>
       {/* Rotas específicas primeiro */}
       <Route path={"/emails"} component={EmailManager} />
       <Route path={"/facebook"} component={FacebookManager} />
@@ -31,7 +32,7 @@ function Router() {
       <Route path={"/"} component={Home} />
       {/* Final fallback route */}
       <Route component={NotFound} />
-    </Switch>
+    </Switch></Router>
   );
 }
 
@@ -48,8 +49,7 @@ function App() {
         // switchable
       >
         <TooltipProvider>
-          <Toaster />
-          <Router />
+          <AppRouter />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
