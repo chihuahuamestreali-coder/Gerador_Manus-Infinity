@@ -71,28 +71,28 @@ export default function Home() {
       badge: 'INBOX PRO'
     },
     { 
-      title: 'Temu Device Master', 
-      desc: 'Simulação WebView shopping, cupons novo usuário & bypass anti-bot', 
+      title: 'Temu Master', 
+      desc: 'Bypass anti-bot + Injeção 16+ ferramentas & App Nativo Temu', 
       path: '/temu', 
       icon: ShoppingCart, 
       color: 'from-orange-500/15 via-orange-500/5 to-transparent border-orange-500/30 text-orange-400 hover:border-orange-500/80',
-      badge: 'TEMU APP'
+      badge: 'BLINDAGEM 16+'
     },
     { 
-      title: 'Dark Security Suite', 
-      desc: 'Privacidade avançada, túneis onion proxy & blindagem de headers', 
+      title: 'Dark', 
+      desc: 'Ambiente isolado de privacidade e segurança avançada', 
       path: '/dark', 
       icon: ShieldAlert, 
       color: 'from-emerald-600/15 via-emerald-600/5 to-transparent border-emerald-600/30 text-emerald-300 hover:border-emerald-600/80',
-      badge: 'STEALTH PRO'
+      badge: 'PRIVACY LAB'
     },
     { 
-      title: 'Ursa AI Core', 
-      desc: 'Orquestração de agentes autônomos & automação multi-modelo', 
+      title: 'Ursa', 
+      desc: 'Abertura de link externo e serviços associados', 
       path: '/ursa', 
       icon: Bot, 
       color: 'from-blue-600/15 via-blue-600/5 to-transparent border-blue-500/30 text-blue-400 hover:border-blue-500/80',
-      badge: 'AGENT CORE'
+      badge: 'EXTERNAL SITE'
     },
   ];
 
