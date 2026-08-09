@@ -130,8 +130,8 @@ export default function ManusManager() {
     setInjectionStatus('opening');
     setInjectionMessage('Abrindo aba do Manus...');
 
-    // Gera a URL do Manus
-    const manusUrl = generateManusUrlWithReferral(referralLink);
+    // Gera a URL do Manus com suporte a links de convite e conversa
+    const manusUrl = generateManusSignupUrl(referralLink);
     
     // Gera o script completo de injeção
     const bookmarklet = generateManusBookmarklet(currentDevice);
