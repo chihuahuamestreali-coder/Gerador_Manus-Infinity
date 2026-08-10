@@ -1,5 +1,5 @@
 import { useLocation } from 'wouter';
-import { ShoppingCart, Instagram, Facebook, Video, Bot, Sparkles, Mail, ShieldAlert, Cpu, ArrowRight, Github, MessageCircle } from 'lucide-react';
+import { ShoppingCart, Instagram, Facebook, Video, Bot, Sparkles, Mail, ShieldAlert, Cpu, ArrowRight, Github, MessageCircle, Package, ShoppingBag } from 'lucide-react';
 import DarkSpecialBanner from '@/components/DarkSpecialBanner';
 import VanGoghBanner from '@/components/VanGoghBanner';
 
@@ -14,6 +14,30 @@ export default function Home() {
       icon: ShoppingCart, 
       color: 'from-red-500/15 via-red-500/5 to-transparent border-red-500/30 text-red-400 hover:border-red-500/80',
       badge: 'BLINDAGEM 16+'
+    },
+    { 
+      title: 'Mercado Livre Master', 
+      desc: 'Blindagem ML Device ID & Tracking + Injeção 16+ ferramentas anti-detecção', 
+      path: '/mercado-livre', 
+      icon: ShoppingCart, 
+      color: 'from-yellow-400/15 via-yellow-400/5 to-transparent border-yellow-400/30 text-yellow-300 hover:border-yellow-400/80',
+      badge: 'ML ANTI-FRAUDE'
+    },
+    { 
+      title: 'Amazon Master', 
+      desc: 'Tokens de device Amazon blindados + Injeção 16+ anti-detecção', 
+      path: '/amazon', 
+      icon: Package, 
+      color: 'from-amber-600/15 via-amber-600/5 to-transparent border-amber-500/30 text-amber-400 hover:border-amber-500/80',
+      badge: 'ANTI-FRAUD PRO'
+    },
+    { 
+      title: 'Shopee Master', 
+      desc: 'Bypass SACS anti-cheating + Device ID & SPSID blindados 16+', 
+      path: '/shopee', 
+      icon: ShoppingBag, 
+      color: 'from-orange-600/15 via-orange-600/5 to-transparent border-orange-500/30 text-orange-400 hover:border-orange-500/80',
+      badge: 'SACS BYPASS'
     },
     { 
       title: 'Instagram Manager', 
@@ -112,7 +136,7 @@ export default function Home() {
         <div className="text-center mb-12 border-b border-border/40 pb-8">
           <div className="mb-5 flex items-center justify-center gap-3">
             <img src="/manus-storage/device-master-mark_0b9ede57.png" alt="Símbolo Device Master" className="h-11 w-11 rounded-xl border border-teal-300/30 bg-slate-950/70 p-2" />
-            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 12 MÓDULOS + 2 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
+            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 15 MÓDULOS + 2 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
           </div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs mb-4 shadow-sm">
             <Cpu className="w-4 h-4 animate-pulse" />

@@ -14,6 +14,9 @@ import TikTokManager from "./pages/TikTokManager";
 import GmailManager from "./pages/GmailManager";
 import ClaudeManager from "./pages/ClaudeManager";
 import TemuManager from "./pages/TemuManager";
+import MercadoLibreManager from "./pages/MercadoLibreManager";
+import AmazonManager from "./pages/AmazonManager";
+import ShopeeManager from "./pages/ShopeeManager";
 import PrivateTunnelsManager from "./pages/PrivateTunnelsManager";
 import DarkSpecial from "./pages/DarkSpecial";
 import UrsaManager from "@/pages/UrsaManager";
@@ -32,6 +35,11 @@ function AppRouter() {
       <Route path={"/gmail"} component={GmailManager} />
       <Route path={"/claude"} component={ClaudeManager} />
       <Route path={"/temu"} component={TemuManager} />
+      <Route path={"/mercado-livre"} component={MercadoLibreManager} />
+      <Route path={"/amazon"} component={AmazonManager} />
+      <Route path={"/shopee"} component={ShopeeManager} />
+      <Route path={"/github-manager"} component={PrivateTunnelsManager} />
+      <Route path={"/discord-manager"} component={PrivateTunnelsManager} />
       <Route path={"/private-tunnels"} component={PrivateTunnelsManager} />
       <Route path={"/dark"} component={DarkSpecial} />
       <Route path={"/ursa"} component={UrsaManager} />

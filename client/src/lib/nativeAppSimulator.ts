@@ -11,7 +11,7 @@
  */
 
 export interface AppSimulationOptions {
-  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia';
+  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'mercadolibre' | 'amazon' | 'shopee';
   locale?: string;
   appVersion?: string;
 }
@@ -179,6 +179,76 @@ export function generateNativeAppSimulationForProfile(
               });
             } catch(e) {}
             console.log('%c🛍️ Simulação de App Nativo TEMU ATIVA (Bypass de Preços & Cupons de Novo Usuário)', 'color: #ff6600; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'mercadolibre':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isMercadoLibreApp = true;
+            window.MLBridge = { isPresent: true, version: '10.98.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'marketplace_app' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__ML_DEEP_LINK__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} MLApp/10.98.0 Android/${'13'} (${'SM-G991B'}; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c💛 Simulação de App Nativo MERCADO LIVRE ATIVA (anti-bot ML desafiado)', 'color: #ffe600; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'amazon':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isAmazonApp = true;
+            window.AmazonBridge = { isPresent: true, version: '26.22.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'shopping_app' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__AMAZON_DEVICE_TOKEN__ = 'at|' + Math.random().toString(36).substring(2, 30);
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} AmazonApp/26.22.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c🧡 Simulação de App Nativo AMAZON ATIVA (anti-fraude Amazon desafiado)', 'color: #ff9900; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'shopee':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isShopeeApp = true;
+            window.ShopeeBridge = { isPresent: true, version: '3.45.12', locale: '${locale}', deviceId: '${options.imei}', appType: 'shopping_app' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__SACS_BYPASS__ = true;
+            window.__SP_DEEP_LINK__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} ShopeeApp/3.45.12 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c🟠 Simulação de App Nativo SHOPEE ATIVA (SACS anti-cheating desafiado)', 'color: #ee4d2d; font-weight: bold; font-size: 13px;');
           } catch(err) { console.error('App sim erro:', err); }
         })();
       `;
