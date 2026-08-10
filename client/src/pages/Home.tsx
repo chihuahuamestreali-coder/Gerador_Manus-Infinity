@@ -105,19 +105,27 @@ export default function Home() {
     },
     { 
       title: 'GitHub Manager', 
-      desc: 'Criação de contas e bypass anti-bot com injeção 16+ completa', 
+      desc: 'Cadastro direto (github.com/signup) com injeção 16+, shield anti-abuse e fingerprint blindado', 
       path: '/github-manager', 
       icon: Github, 
       color: 'from-slate-600/15 via-slate-600/5 to-transparent border-slate-500/30 text-slate-200 hover:border-slate-400/80',
-      badge: 'DEV BYPASS'
+      badge: 'SIGNUP BLINDADO'
     },
     { 
-      title: 'Discord Manager', 
-      desc: 'Blindagem e spoofing avançado para cadastro de contas Discord', 
+      title: 'DARK MASTER HUB', 
+      desc: 'Menu mestre de privacidade: túneis onion, spoofing de headers e portais blindados', 
       path: '/discord-manager', 
       icon: MessageCircle, 
       color: 'from-indigo-600/15 via-indigo-600/5 to-transparent border-indigo-500/30 text-indigo-300 hover:border-indigo-400/80',
-      badge: 'AUTH PRO'
+      badge: 'HUB PRIVACIDADE'
+    },
+    { 
+      title: 'Discord - Site', 
+      desc: 'Registro direto (discord.com/register) com injeção 16+, shield anti-bot e superprops sintéticas', 
+      path: '/discord-site', 
+      icon: MessageCircle, 
+      color: 'from-violet-600/15 via-violet-600/5 to-transparent border-violet-500/30 text-violet-300 hover:border-violet-400/80',
+      badge: 'REGISTER 16+'
     },
     { 
       title: 'Ursa', 
@@ -136,7 +144,7 @@ export default function Home() {
         <div className="text-center mb-12 border-b border-border/40 pb-8">
           <div className="mb-5 flex items-center justify-center gap-3">
             <img src="/manus-storage/device-master-mark_0b9ede57.png" alt="Símbolo Device Master" className="h-11 w-11 rounded-xl border border-teal-300/30 bg-slate-950/70 p-2" />
-            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 15 MÓDULOS + 2 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
+            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 16 MÓDULOS + 2 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
           </div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs mb-4 shadow-sm">
             <Cpu className="w-4 h-4 animate-pulse" />

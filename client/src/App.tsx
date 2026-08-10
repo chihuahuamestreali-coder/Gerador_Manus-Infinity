@@ -15,6 +15,8 @@ import GmailManager from "./pages/GmailManager";
 import ClaudeManager from "./pages/ClaudeManager";
 import TemuManager from "./pages/TemuManager";
 import MercadoLibreManager from "./pages/MercadoLibreManager";
+import GitHubManager from "./pages/GitHubManager";
+import DiscordSiteManager from "./pages/DiscordSiteManager";
 import AmazonManager from "./pages/AmazonManager";
 import ShopeeManager from "./pages/ShopeeManager";
 import PrivateTunnelsManager from "./pages/PrivateTunnelsManager";
@@ -38,7 +40,8 @@ function AppRouter() {
       <Route path={"/mercado-livre"} component={MercadoLibreManager} />
       <Route path={"/amazon"} component={AmazonManager} />
       <Route path={"/shopee"} component={ShopeeManager} />
-      <Route path={"/github-manager"} component={PrivateTunnelsManager} />
+      <Route path={"/discord-site"} component={DiscordSiteManager} />
+      <Route path={"/github-manager"} component={GitHubManager} />
       <Route path={"/discord-manager"} component={PrivateTunnelsManager} />
       <Route path={"/private-tunnels"} component={PrivateTunnelsManager} />
       <Route path={"/dark"} component={DarkSpecial} />

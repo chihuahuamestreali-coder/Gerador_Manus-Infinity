@@ -11,7 +11,7 @@
  */
 
 export interface AppSimulationOptions {
-  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'mercadolibre' | 'amazon' | 'shopee';
+  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'mercadolibre' | 'amazon' | 'shopee' | 'discord' | 'github';
   locale?: string;
   appVersion?: string;
 }
@@ -249,6 +249,53 @@ export function generateNativeAppSimulationForProfile(
               });
             } catch(e) {}
             console.log('%c🟠 Simulação de App Nativo SHOPEE ATIVA (SACS anti-cheating desafiado)', 'color: #ee4d2d; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'discord':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isDiscordApp = true;
+            window.DiscordNative = { isPresent: true, version: '3.0.12', locale: '${locale}', deviceId: '${options.imei}', appType: 'chat_app' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__DISCORD_ELECTRON__ = true;
+            window.__DISCORD_DEEP_LINK__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} Discord/3.0.12 (Windows; ${locale}; app)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c🟣 Simulação de App Nativo DISCORD ATIVA (anti-moderação Discord desafiada)', 'color: #5865F2; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'github':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isGitHubApp = true;
+            window.GitHubBridge = { isPresent: true, version: '1.100.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'dev_app' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__GH_DEEP_LINK__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} GitHubApp/1.100.0 (Windows; ${locale}; app)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c⚫ Simulação de App Nativo GITHUB ATIVA (anti-abuse GitHub desafiado)', 'color: #58A6FF; font-weight: bold; font-size: 13px;');
           } catch(err) { console.error('App sim erro:', err); }
         })();
       `;
