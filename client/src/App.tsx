@@ -17,6 +17,7 @@ import TemuManager from "./pages/TemuManager";
 import MercadoLibreManager from "./pages/MercadoLibreManager";
 import GitHubManager from "./pages/GitHubManager";
 import DiscordSiteManager from "./pages/DiscordSiteManager";
+import ScoobyDooHub from "./pages/ScoobyDooHub";
 import AmazonManager from "./pages/AmazonManager";
 import ShopeeManager from "./pages/ShopeeManager";
 import PrivateTunnelsManager from "./pages/PrivateTunnelsManager";
@@ -45,6 +46,7 @@ function AppRouter() {
       <Route path={"/discord-manager"} component={PrivateTunnelsManager} />
       <Route path={"/private-tunnels"} component={PrivateTunnelsManager} />
       <Route path={"/dark"} component={DarkSpecial} />
+      <Route path={"/scooby-doo"} component={ScoobyDooHub} />
       <Route path={"/ursa"} component={UrsaManager} />
       <Route path={"/van-gogh"} component={VanGoghHub} />
       <Route path={"/404"} component={NotFound} />

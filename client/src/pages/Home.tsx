@@ -2,6 +2,7 @@ import { useLocation } from 'wouter';
 import { ShoppingCart, Instagram, Facebook, Video, Bot, Sparkles, Mail, ShieldAlert, Cpu, ArrowRight, Github, MessageCircle, Package, ShoppingBag } from 'lucide-react';
 import DarkSpecialBanner from '@/components/DarkSpecialBanner';
 import VanGoghBanner from '@/components/VanGoghBanner';
+import ScoobyDooBanner from '@/components/ScoobyDooBanner';
 
 export default function Home() {
   const [, setLocation] = useLocation();
@@ -144,7 +145,7 @@ export default function Home() {
         <div className="text-center mb-12 border-b border-border/40 pb-8">
           <div className="mb-5 flex items-center justify-center gap-3">
             <img src="/manus-storage/device-master-mark_0b9ede57.png" alt="Símbolo Device Master" className="h-11 w-11 rounded-xl border border-teal-300/30 bg-slate-950/70 p-2" />
-            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 16 MÓDULOS + 2 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
+            <div className="text-left"><p className="text-[10px] font-bold uppercase tracking-[0.24em] text-teal-300">FIELD MANUAL / 16 MÓDULOS + 3 HUBS</p><p className="text-xs text-slate-400">Leia o escopo antes de operar</p></div>
           </div>
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs mb-4 shadow-sm">
             <Cpu className="w-4 h-4 animate-pulse" />
@@ -197,6 +198,9 @@ export default function Home() {
 
         {/* Van Gogh Master Banner - mesma linguagem visual, com submenus independentes */}
         <VanGoghBanner onClick={() => setLocation('/van-gogh')} />
+
+        {/* Scooby-Doo Delivery Hub Banner */}
+        <ScoobyDooBanner onClick={() => setLocation('/scooby-doo')} />
 
         {/* Footer */}
         <div className="mt-16 text-center text-xs text-muted-foreground border-t border-border/30 pt-6">

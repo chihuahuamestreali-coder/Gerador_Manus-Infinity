@@ -409,4 +409,18 @@ export const MODULE_GUIDES: Record<string, ModuleGuide> = {
     whyDifferent: 'Abre direto na URL oficial de registro (discord.com/register) e injeta superproperties e device ID sintéticos que o Discord usa para detecção de automação.',
     limitations: 'Simulações locais auxiliam na consistência de perfil, mas dependem das políticas da plataforma.',
   },
+  'scooby-doo': {
+    key: 'scooby-doo', title: 'Scooby-Doo Delivery Hub', family: 'Delivery & Anti-Fraud Suite',
+    mission: 'Hub mestre para gerenciamento de contas em plataformas de delivery (iFood, AiQFome, Zé Delivery) com bypass de geolocalização e anti-fraude.',
+    scope: 'Central de injeção especializada em apps de delivery, com simulação de WebView nativo, spoofing de coordenadas GPS, blindagem de IMEI/Android ID e comportamento humano realista.',
+    fields: [
+      { label: 'Geolocalização', meaning: 'Spoofing de coordenadas (Lat/Lng) em capitais brasileiras para bypass de raio de entrega.' },
+      { label: 'Native Bridge', meaning: 'Simulação de objetos globais dos apps (iFoodBridge, AiQFomeBridge, ZeBridge).' },
+      { label: 'Device Masking', meaning: 'Blindagem de identificadores de hardware para evitar banimento por device.' },
+      { label: 'Persona', meaning: 'Dados sintéticos para teste de fluxo de pedido e cadastro.' },
+    ],
+    recommendedFlow: ['Escolha a plataforma de delivery no hub.', 'Gere o perfil técnico com geolocalização ativa.', 'Inicie a injeção para abrir o portal de delivery blindado.'],
+    whyDifferent: 'Único módulo com foco total em bypass de geolocalização e anti-fraude específico para ecossistemas de delivery mobile.',
+    limitations: 'A precisão da geolocalização simulada depende da aceitação do navegador/WebView de destino.',
+  },
 };

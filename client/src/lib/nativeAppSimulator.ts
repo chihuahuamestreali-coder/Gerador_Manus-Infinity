@@ -11,7 +11,7 @@
  */
 
 export interface AppSimulationOptions {
-  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'mercadolibre' | 'amazon' | 'shopee' | 'discord' | 'github';
+  platform: 'instagram' | 'aliexpress' | 'tiktok' | 'facebook' | 'temu' | 'claude' | 'gmail' | 'manus' | 'universal' | 'skynetchat' | 'deephat' | 'venice' | 'simplelogin' | 'nastia' | 'mercadolibre' | 'amazon' | 'shopee' | 'discord' | 'github' | 'ifood' | 'aiqfome' | 'zedelivery';
   locale?: string;
   appVersion?: string;
 }
@@ -296,6 +296,74 @@ export function generateNativeAppSimulationForProfile(
               });
             } catch(e) {}
             console.log('%c⚫ Simulação de App Nativo GITHUB ATIVA (anti-abuse GitHub desafiado)', 'color: #58A6FF; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'ifood':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isIFoodApp = true;
+            window.IFoodNative = { isPresent: true, version: '9.102.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'food_delivery' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__IFOOD_BRIDGE__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} iFood/9.102.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c❤️ Simulação de App Nativo IFOOD ATIVA (anti-fraude iFood desafiado)', 'color: #ea1d2c; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'aiqfome':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isAiQFomeApp = true;
+            window.AiQFomeBridge = { isPresent: true, version: '4.12.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'food_delivery' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} AiQFome/4.12.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c💜 Simulação de App Nativo AIQFOME ATIVA (anti-detecção AiQFome desafiada)', 'color: #7b1fa2; font-weight: bold; font-size: 13px;');
+          } catch(err) { console.error('App sim erro:', err); }
+        })();
+      `;
+    case 'zedelivery':
+      return `
+        (function() {
+          try {
+            window.isWebview = true;
+            window.isZeApp = true;
+            window.ZeBridge = { isPresent: true, version: '2.55.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'beverages_delivery' };
+            if (!window.ReactNativeWebView) {
+              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+            }
+            window.__APP_ENV__ = 'native';
+            window.__NATIVE_SHELL__ = true;
+            window.__ZE_OVER_18__ = true;
+            try {
+              Object.defineProperty(navigator, 'userAgent', {
+                get: function() { return "${options.userAgent} ZeDelivery/2.55.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                configurable: true
+              });
+            } catch(e) {}
+            console.log('%c💛 Simulação de App Nativo ZÉ DELIVERY ATIVA (anti-fraude Zé desafiado)', 'color: #ffcc00; font-weight: bold; font-size: 13px;');
           } catch(err) { console.error('App sim erro:', err); }
         })();
       `;
