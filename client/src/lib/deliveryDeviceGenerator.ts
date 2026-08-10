@@ -42,7 +42,7 @@ const BRAZIL_CAPITALS = [
   { lat: -22.7518, lng: -43.7082, name: 'Seropédica' },
 ];
 
-export function generateDeliveryDeviceProfile(platform: 'ifood' | 'aiqfome' | 'zedelivery', customLocation?: { lat: number, lng: number }): DeliveryDeviceProfile {
+export function generateDeliveryDeviceProfile(platform: 'ifood' | 'zedelivery', customLocation?: { lat: number, lng: number }): DeliveryDeviceProfile {
   const device = DELIVERY_DEVICES[Math.floor(Math.random() * DELIVERY_DEVICES.length)];
   const capital = customLocation ? { ...customLocation, name: 'Custom' } : BRAZIL_CAPITALS[Math.floor(Math.random() * BRAZIL_CAPITALS.length)];
   

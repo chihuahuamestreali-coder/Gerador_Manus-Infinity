@@ -411,11 +411,11 @@ export const MODULE_GUIDES: Record<string, ModuleGuide> = {
   },
   'scooby-doo': {
     key: 'scooby-doo', title: 'Scooby-Doo Delivery Hub', family: 'Delivery & Anti-Fraud Suite',
-    mission: 'Hub mestre para gerenciamento de contas em plataformas de delivery (iFood, AiQFome, Zé Delivery) com bypass de geolocalização e anti-fraude.',
+    mission: 'Hub mestre para gerenciamento de contas em plataformas de delivery (iFood e Zé Delivery) com bypass de geolocalização e anti-fraude.',
     scope: 'Central de injeção especializada em apps de delivery, com simulação de WebView nativo, spoofing de coordenadas GPS, blindagem de IMEI/Android ID e comportamento humano realista.',
     fields: [
       { label: 'Geolocalização', meaning: 'Spoofing de coordenadas (Lat/Lng) em capitais brasileiras para bypass de raio de entrega.' },
-      { label: 'Native Bridge', meaning: 'Simulação de objetos globais dos apps (iFoodBridge, AiQFomeBridge, ZeBridge).' },
+      { label: 'Native Bridge', meaning: 'Simulação de objetos globais dos apps (iFoodBridge, ZeBridge).' },
       { label: 'Device Masking', meaning: 'Blindagem de identificadores de hardware para evitar banimento por device.' },
       { label: 'Persona', meaning: 'Dados sintéticos para teste de fluxo de pedido e cadastro.' },
     ],

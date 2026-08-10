@@ -13,7 +13,7 @@ import { Utensils, Play, Loader2, ShieldCheck, Smartphone, Sparkles, ArrowLeft, 
 import { toast } from 'sonner';
 import { useLocation } from 'wouter';
 
-type DeliveryPlatform = 'ifood' | 'aiqfome' | 'zedelivery';
+type DeliveryPlatform = 'ifood' | 'zedelivery';
 
 const PLATFORM_CONFIG = {
   ifood: {
@@ -25,15 +25,6 @@ const PLATFORM_CONFIG = {
     border: 'border-red-500/30',
     bg: 'bg-red-500/10'
   },
-  aiqfome: {
-    name: 'AiQFome Master',
-    url: 'https://aiqfome.com',
-    color: '#7b1fa2',
-    icon: Utensils,
-    accent: 'text-purple-500',
-    border: 'border-purple-500/30',
-    bg: 'bg-purple-500/10'
-  },
   zedelivery: {
     name: 'Zé Delivery Master',
     url: 'https://www.ze.delivery',
@@ -44,8 +35,6 @@ const PLATFORM_CONFIG = {
     bg: 'bg-yellow-500/10'
   }
 };
-
-const SEROPEDICA_LOC = { lat: -22.7518, lng: -43.7082 };
 
 export default function ScoobyDooHub() {
   const [, setLocation] = useLocation();
@@ -60,7 +49,6 @@ export default function ScoobyDooHub() {
   const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
   const [enableLocationSpoofing, setEnableLocationSpoofing] = useState(true);
-  const [useDefaultLocation, setUseDefaultLocation] = useState(true);
   const [enableDeviceTokens, setEnableDeviceTokens] = useState(true);
   
   const [historyCount, setHistoryCount] = useState(0);
@@ -72,10 +60,7 @@ export default function ScoobyDooHub() {
   const handleGenerate = async () => {
     setIsGenerating(true);
     await new Promise(r => setTimeout(r, 800));
-    const newDev = generateDeliveryDeviceProfile(
-      activePlatform, 
-      (activePlatform === 'aiqfome' && useDefaultLocation) ? SEROPEDICA_LOC : undefined
-    );
+    const newDev = generateDeliveryDeviceProfile(activePlatform);
     const newPerson = generatePersonalData();
     setDevice(newDev);
     setPersonalData(newPerson);
@@ -263,7 +248,7 @@ export default function ScoobyDooHub() {
         <ModuleGuide guide={MODULE_GUIDES['scooby-doo']} accentClass="text-primary" />
 
         {/* Submenu Selector */}
-        <div className="grid grid-cols-3 gap-4 my-8">
+        <div className="grid grid-cols-2 gap-4 my-8">
           {(Object.keys(PLATFORM_CONFIG) as DeliveryPlatform[]).map((p) => {
             const cfg = PLATFORM_CONFIG[p];
             const Icon = cfg.icon;
@@ -329,15 +314,6 @@ export default function ScoobyDooHub() {
                   <p className="text-[11px] text-muted-foreground">Força coordenadas GPS na sessão.</p>
                 </div>
               </div>
-              {activePlatform === 'aiqfome' && (
-                <div className="flex items-start space-x-3 p-3 rounded-xl bg-background/50 border border-border/50">
-                  <Checkbox id="deliv-seropedica" checked={useDefaultLocation} onCheckedChange={(c) => setUseDefaultLocation(!!c)} />
-                  <div className="grid gap-1.5 leading-none">
-                    <label htmlFor="deliv-seropedica" className="text-sm font-bold cursor-pointer">Auto-preencher Seropédica/RJ</label>
-                    <p className="text-[11px] text-muted-foreground">Fixa geolocalização padrão no perfil.</p>
-                  </div>
-                </div>
-              )}
               <div className="flex items-start space-x-3 p-3 rounded-xl bg-background/50 border border-border/50">
                 <Checkbox id="deliv-tokens" checked={enableDeviceTokens} onCheckedChange={(c) => setEnableDeviceTokens(!!c)} />
                 <div className="grid gap-1.5 leading-none">
