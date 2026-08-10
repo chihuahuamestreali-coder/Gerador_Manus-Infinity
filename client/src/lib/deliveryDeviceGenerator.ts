@@ -39,15 +39,16 @@ const BRAZIL_CAPITALS = [
   { lat: -19.9167, lng: -43.9345, name: 'Belo Horizonte' },
   { lat: -15.7975, lng: -47.8919, name: 'Brasília' },
   { lat: -30.0346, lng: -51.2177, name: 'Porto Alegre' },
+  { lat: -22.7518, lng: -43.7082, name: 'Seropédica' },
 ];
 
-export function generateDeliveryDeviceProfile(platform: 'ifood' | 'aiqfome' | 'zedelivery'): DeliveryDeviceProfile {
+export function generateDeliveryDeviceProfile(platform: 'ifood' | 'aiqfome' | 'zedelivery', customLocation?: { lat: number, lng: number }): DeliveryDeviceProfile {
   const device = DELIVERY_DEVICES[Math.floor(Math.random() * DELIVERY_DEVICES.length)];
-  const capital = BRAZIL_CAPITALS[Math.floor(Math.random() * BRAZIL_CAPITALS.length)];
+  const capital = customLocation ? { ...customLocation, name: 'Custom' } : BRAZIL_CAPITALS[Math.floor(Math.random() * BRAZIL_CAPITALS.length)];
   
   // Variação leve na coordenada para não ser o centro exato
-  const lat = capital.lat + (Math.random() - 0.5) * 0.01;
-  const lng = capital.lng + (Math.random() - 0.5) * 0.01;
+  const lat = capital.lat + (Math.random() - 0.5) * 0.002;
+  const lng = capital.lng + (Math.random() - 0.5) * 0.002;
 
   const randHex = (n: number) => Array.from({ length: n }, () => Math.floor(Math.random() * 16).toString(16)).join('');
   

@@ -328,17 +328,32 @@ export function generateNativeAppSimulationForProfile(
           try {
             window.isWebview = true;
             window.isAiQFomeApp = true;
-            window.AiQFomeBridge = { isPresent: true, version: '4.12.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'food_delivery' };
+            window.AiQFomeBridge = { 
+              isPresent: true, 
+              version: '4.12.0', 
+              locale: '${locale}', 
+              deviceId: '${options.imei}', 
+              appType: 'food_delivery',
+              getSystemInfo: function() { return JSON.stringify({os: 'android', version: '13', model: 'SM-G991B'}); }
+            };
+            window.nativeInterface = window.AiQFomeBridge;
             if (!window.ReactNativeWebView) {
-              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+              window.ReactNativeWebView = { 
+                postMessage: function(msg){ console.log('RN Post:', msg); }, 
+                injectJSON: function(){}, 
+                canGoBack: true, 
+                canGoForward: false 
+              };
             }
             window.__APP_ENV__ = 'native';
             window.__NATIVE_SHELL__ = true;
+            window.__IS_NATIVE__ = true;
             try {
               Object.defineProperty(navigator, 'userAgent', {
-                get: function() { return "${options.userAgent} AiQFome/4.12.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                get: function() { return "${options.userAgent} AiQFome/4.12.0 Android/13 (SM-G991B; ${locale}; app_store) NativeApp"; },
                 configurable: true
               });
+              Object.defineProperty(navigator, 'platform', { get: function() { return "Linux armv8l"; }, configurable: true });
             } catch(e) {}
             console.log('%c💜 Simulação de App Nativo AIQFOME ATIVA (anti-detecção AiQFome desafiada)', 'color: #7b1fa2; font-weight: bold; font-size: 13px;');
           } catch(err) { console.error('App sim erro:', err); }
@@ -350,18 +365,33 @@ export function generateNativeAppSimulationForProfile(
           try {
             window.isWebview = true;
             window.isZeApp = true;
-            window.ZeBridge = { isPresent: true, version: '2.55.0', locale: '${locale}', deviceId: '${options.imei}', appType: 'beverages_delivery' };
+            window.ZeBridge = { 
+              isPresent: true, 
+              version: '2.55.0', 
+              locale: '${locale}', 
+              deviceId: '${options.imei}', 
+              appType: 'beverages_delivery',
+              isNative: true,
+              callNative: function() { return true; }
+            };
             if (!window.ReactNativeWebView) {
-              window.ReactNativeWebView = { postMessage: function(){}, injectJSON: function(){}, canGoBack: true, canGoForward: false };
+              window.ReactNativeWebView = { 
+                postMessage: function(msg){ console.log('RN Post:', msg); }, 
+                injectJSON: function(){}, 
+                canGoBack: true, 
+                canGoForward: false 
+              };
             }
             window.__APP_ENV__ = 'native';
             window.__NATIVE_SHELL__ = true;
             window.__ZE_OVER_18__ = true;
+            window.__IS_NATIVE__ = true;
             try {
               Object.defineProperty(navigator, 'userAgent', {
-                get: function() { return "${options.userAgent} ZeDelivery/2.55.0 Android/13 (SM-G991B; ${locale}; app_store)"; },
+                get: function() { return "${options.userAgent} ZeDelivery/2.55.0 Android/13 (SM-G991B; ${locale}; app_store) NativeApp"; },
                 configurable: true
               });
+              Object.defineProperty(navigator, 'platform', { get: function() { return "Linux armv8l"; }, configurable: true });
             } catch(e) {}
             console.log('%c💛 Simulação de App Nativo ZÉ DELIVERY ATIVA (anti-fraude Zé desafiado)', 'color: #ffcc00; font-weight: bold; font-size: 13px;');
           } catch(err) { console.error('App sim erro:', err); }

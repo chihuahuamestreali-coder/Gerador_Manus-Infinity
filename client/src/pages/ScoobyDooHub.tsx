@@ -36,7 +36,7 @@ const PLATFORM_CONFIG = {
   },
   zedelivery: {
     name: 'Zé Delivery Master',
-    url: 'https://www.zedelivery.com.br',
+    url: 'https://www.ze.delivery',
     color: '#ffcc00',
     icon: Beer,
     accent: 'text-yellow-500',
@@ -44,6 +44,8 @@ const PLATFORM_CONFIG = {
     bg: 'bg-yellow-500/10'
   }
 };
+
+const SEROPEDICA_LOC = { lat: -22.7518, lng: -43.7082 };
 
 export default function ScoobyDooHub() {
   const [, setLocation] = useLocation();
@@ -58,6 +60,7 @@ export default function ScoobyDooHub() {
   const [simulateNativeApp, setSimulateNativeApp] = useState(true);
   const [enableHumanBehavior, setEnableHumanBehavior] = useState(true);
   const [enableLocationSpoofing, setEnableLocationSpoofing] = useState(true);
+  const [useDefaultLocation, setUseDefaultLocation] = useState(true);
   const [enableDeviceTokens, setEnableDeviceTokens] = useState(true);
   
   const [historyCount, setHistoryCount] = useState(0);
@@ -69,7 +72,10 @@ export default function ScoobyDooHub() {
   const handleGenerate = async () => {
     setIsGenerating(true);
     await new Promise(r => setTimeout(r, 800));
-    const newDev = generateDeliveryDeviceProfile(activePlatform);
+    const newDev = generateDeliveryDeviceProfile(
+      activePlatform, 
+      (activePlatform === 'aiqfome' && useDefaultLocation) ? SEROPEDICA_LOC : undefined
+    );
     const newPerson = generatePersonalData();
     setDevice(newDev);
     setPersonalData(newPerson);
@@ -323,6 +329,15 @@ export default function ScoobyDooHub() {
                   <p className="text-[11px] text-muted-foreground">Força coordenadas GPS na sessão.</p>
                 </div>
               </div>
+              {activePlatform === 'aiqfome' && (
+                <div className="flex items-start space-x-3 p-3 rounded-xl bg-background/50 border border-border/50">
+                  <Checkbox id="deliv-seropedica" checked={useDefaultLocation} onCheckedChange={(c) => setUseDefaultLocation(!!c)} />
+                  <div className="grid gap-1.5 leading-none">
+                    <label htmlFor="deliv-seropedica" className="text-sm font-bold cursor-pointer">Auto-preencher Seropédica/RJ</label>
+                    <p className="text-[11px] text-muted-foreground">Fixa geolocalização padrão no perfil.</p>
+                  </div>
+                </div>
+              )}
               <div className="flex items-start space-x-3 p-3 rounded-xl bg-background/50 border border-border/50">
                 <Checkbox id="deliv-tokens" checked={enableDeviceTokens} onCheckedChange={(c) => setEnableDeviceTokens(!!c)} />
                 <div className="grid gap-1.5 leading-none">
